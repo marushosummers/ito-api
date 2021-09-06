@@ -3,7 +3,7 @@ FROM openjdk:slim
 RUN set -ex \
     && apt-get update \
     && apt-get install -y curl wget \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash \
+    && curl -sL https://deb.nodesource.com/setup_14.x | bash \
     && apt-get install -y nodejs \
     && apt remove cmdtest \
     && apt remove yarn \
