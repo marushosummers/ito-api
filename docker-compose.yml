@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  node:
+    build: .
+    ports:
+      - 9099:9099 # Auth
+      - 3000:3000 # React
+      - 4000:4000 # Emulator Suite UI
+      - 5000:5000 # Cloud Hosting
+      - 5001:5001 # Cloud Functions
+      - 8080:8080 # Cloud Firestore
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:/usr/src/app
+    command:
+      bash -c 'yarn && cd functions && yarn && /bin/bash'
