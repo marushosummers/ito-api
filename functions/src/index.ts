@@ -4,9 +4,9 @@ import * as admin from "firebase-admin";
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
-// export const helloWorld = functions.https.onRequest((request, response) => {
+// export const helloWorld = functions.https.onRequest((req, res) => {
 //   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
+//   res.send("Hello from Firebase!");
 // });
 
 admin.initializeApp(functions.config().firebase);
@@ -19,22 +19,35 @@ admin.initializeApp(functions.config().firebase);
 
 const db = admin.firestore();
 
-export const createDocument = functions.https.onRequest(async (req, res) => {
-  await db.collection("test").doc("abc").set({a: 123});
-  res.send();
+export const signup = functions.https.onRequest(async (req, res) => {
+  // TODO: POST新しいdealerを発行
+  if (req.method !== "GET") {
+    res.status(400).send("GET method is not supported");
+  }
+  res.send("Created new Dealer");
 });
 
-export const updateDocument = functions.https.onRequest(async (req, res) => {
-  await db.collection("test").doc("abc").update({a: 234, b: 345});
-  res.send();
+export const create = functions.https.onRequest(async (req, res) => {
+  // TODO: POST新しいGameを発行
+  await db.collection("game").doc("abc").set({dealerId: 123});
+  res.send("Created new Game");
 });
 
-export const deleteDocument = functions.https.onRequest(async (req, res) => {
-  await db.collection("test").doc("abc").delete();
-  res.send();
+export const quit = functions.https.onRequest(async (req, res) => {
+  // TODO: POSTGameを終了する
+  res.send("Quit the game");
 });
 
-export const getDocument = functions.https.onRequest(async (req, res) => {
-  const data = await (await db.collection("test").doc("abc").get()).data();
-  res.send(data);
+export const game = functions.https.onRequest(async (req, res) => {
+  if (req.method === "GET" && req.query.id === undefined) {
+    // TODO: ゲーム情報をreturnする
+    const data = await (await db.collection("game").doc("abc").get()).data();
+    res.send(data);
+  }
+  res.send("エラー");
+});
+
+export const play = functions.https.onRequest(async (req, res) => {
+  // TODO: POST カードを出すアクション
+  res.send("Play a card by hogehoge");
 });
