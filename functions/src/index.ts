@@ -15,16 +15,16 @@ export const signup = functions.https.onRequest(async (req, res) => {
   // TODO: POST新しいdealerを発行
   if (req.method !== "POST") {
     res.status(400).send("This method is not supported");
-  } else if (req.body.type === undefined || req.body.id === undefined) {
+  } else if (req.body.type === undefined || req.body.name === undefined) {
     res.status(400).send("Invalid body parameter");
   } else {
     const type: string = req.body.type;
-    const id: string = req.body.id;
+    const name: string = req.body.name;
     // dealer = signup_dealer()
     try {
       const result = await db.collection("dealer").add({
         "type": type,
-        "id": id,
+        "name": name,
       });
       res.send(`Created new Dealer ${result.id}`);
     } catch (err) {
