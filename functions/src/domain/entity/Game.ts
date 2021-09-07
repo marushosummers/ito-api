@@ -18,10 +18,10 @@ export type GameStatus = "INPLAY" | "OVER" | "SUCCESS" | "QUIT";
 class Player {
   public readonly id: string
   public readonly card: number
-  public readonly isPlayed: Boolean
+  public readonly isPlayed: boolean
 
-  public constructor(props: {id: string, card: number, isPlayed: Boolean}) {
-    const { id, card, isPlayed } = props;
+  public constructor(props: {id: string, card: number, isPlayed: boolean}) {
+    const {id, card, isPlayed} = props;
     this.id = id;
     this.card = card;
     this.isPlayed = isPlayed;
