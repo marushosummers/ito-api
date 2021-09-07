@@ -1,7 +1,7 @@
 export class Dealer {
-  private id: string
-  private name: string
-  private type: string
+  public readonly id: string
+  public readonly name: string
+  public readonly type: string
 
   public constructor(props: {id: string, name: string; type: string}) {
     const {id, name, type} = props;

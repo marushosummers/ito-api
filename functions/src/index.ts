@@ -1,9 +1,10 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import {SignupDealer} from "./usecase/signup-dealer";
+import {DealerRepository} from "./repository/dealer-repository";
 
 admin.initializeApp(functions.config().firebase);
-
-const db = admin.firestore();
+export const db = admin.firestore();
 
 // localテスト時に設定
 // db.settings({
@@ -12,26 +13,27 @@ const db = admin.firestore();
 // });
 
 export const signup = functions.https.onRequest(async (req, res) => {
-  // TODO: POST新しいdealerを発行
   if (req.method !== "POST") {
     res.status(400).send("This method is not supported");
   } else if (req.body.type === undefined || req.body.name === undefined) {
     res.status(400).send("Invalid body parameter");
   } else {
+    // TODO: Factoryに切り出す
     const type: string = req.body.type;
     const name: string = req.body.name;
-    // dealer = signup_dealer()
+    const dealerRepository = new DealerRepository(db);
+    const signupDealer = new SignupDealer(dealerRepository);
+
     try {
-      const result = await db.collection("dealer").add({
-        "type": type,
-        "name": name,
-      });
-      res.send(`Created new Dealer ${result.id}`);
+      const id = await signupDealer.signup({type: type, name: name});
+      res.send(`Created new Dealer id: ${id}`);
     } catch (err) {
+      console.error(err);
       res.status(500).send("Internal Server Error");
     }
   }
 });
+
 
 export const create = functions.https.onRequest(async (req, res) => {
   // TODO: POST新しいGameを発行

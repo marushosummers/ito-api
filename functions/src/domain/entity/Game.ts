@@ -15,4 +15,4 @@ export class Game {
   }
 }
 
-export type GameStatus = "ONGOING" | "OVER" | "SUCCESS" | "QUIT";
+export type GameStatus = "INPLAY" | "OVER" | "SUCCESS" | "QUIT";
