@@ -2,7 +2,7 @@ FROM openjdk:slim
 
 RUN set -ex \
     && apt-get update \
-    && apt-get install -y curl wget \
+    && apt-get install -y curl wget lsof\
     && curl -sL https://deb.nodesource.com/setup_14.x | bash \
     && apt-get install -y nodejs \
     && apt remove cmdtest \
