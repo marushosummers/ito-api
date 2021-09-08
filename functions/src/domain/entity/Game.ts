@@ -1,8 +1,8 @@
 export class Game {
-  private id: string
-  private thema: string
-  private players: Player[]
-  private status: GameStatus
+  public readonly id: string
+  public readonly thema: string
+  public readonly players: Player[]
+  public readonly status: GameStatus
 
   public constructor(props: { id: string, thema: string, players: Player[], status: GameStatus}) {
     const {id, thema, players, status} = props;
@@ -15,7 +15,7 @@ export class Game {
 
 export type GameStatus = "INPLAY" | "OVER" | "SUCCESS" | "QUIT";
 
-class Player {
+export class Player {
   public readonly id: string
   public readonly card: number
   public readonly isPlayed: boolean

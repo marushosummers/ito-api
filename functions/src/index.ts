@@ -2,6 +2,9 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {SignupDealer} from "./usecase/signup-dealer";
 import {DealerRepository} from "./repository/dealer-repository";
+import {CreateGame} from "./usecase/create-game";
+import {GameRepository} from "./repository/game-repository";
+
 
 admin.initializeApp(functions.config().firebase);
 export const db = admin.firestore();
@@ -39,16 +42,26 @@ export const create = functions.https.onRequest(async (req, res) => {
   // TODO: POST新しいGameを発行
   if (req.method !== "POST") {
     res.status(400).send("This method is not supported");
-  } else if (req.body.type === undefined || req.body.id === undefined) {
+  } else if (req.body.dealerId === undefined) {
     res.status(400).send("Invalid body parameter");
   } else {
-    const type: string = req.body.type;
-    const id: string = req.body.id;
-    // dealer = signup_dealer()
-    res.send(`Created new Dealer ${type} ${id}`);
+    const dealerId = req.body.dealerId;
+    const gameRepository = new GameRepository(db, dealerId);
+    const createGame = new CreateGame(gameRepository);
+    try {
+      const game = await createGame.create({
+        dealerId: dealerId,
+        playerNum: 5,
+        thema: "hoge",
+        minCard: 0,
+        maxCard: 100,
+      });
+      res.send(`Created new Game id: ${game.id}`);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
   }
-  await db.collection("game").doc("abc").set({dealerId: 123});
-  res.send("Created new Game");
 });
 
 export const play = functions.https.onRequest(async (req, res) => {
