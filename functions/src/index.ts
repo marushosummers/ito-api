@@ -55,7 +55,8 @@ export const create = functions.https.onRequest(async (req, res) => {
     const minCard = req.body.minCard;
     const maxCard = req.body.maxCard;
     const gameRepository = new GameRepository(db, dealerId);
-    const createGame = new CreateGame(gameRepository);
+    const qs = new QueryService(db);
+    const createGame = new CreateGame(gameRepository, qs);
     try {
       const game = await createGame.create({
         dealerId: dealerId,

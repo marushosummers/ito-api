@@ -16,12 +16,13 @@ export class PlayCard {
 
     if (!game) {
       throw new ReferenceError("There are no Game in play.");
-    } else if (!game.players.some((player) => player.id === playerId)) {
+    }
+    const player: Player | undefined = game.players.filter((player) => player.id === playerId)[0];
+    if (!player) {
       throw new ReferenceError("The player is not found.");
-    } else if (game.players.some((player) => player.id === playerId && player.isPlayed)) {
+    } else if (player && player.isPlayed) {
       throw new ReferenceError("The player has already played.");
     } else {
-      const player: Player = game.players.filter((player) => player.id === playerId)[0];
       player.setPlayed();
       game.judge();
       await this.gameRepository.save(game);
