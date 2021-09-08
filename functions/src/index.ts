@@ -81,7 +81,6 @@ export const quit = functions.https.onRequest(async (req, res) => {
   } else if (req.body.dealerId === undefined) {
     res.status(400).send("Invalid body parameter");
   } else {
-    // TODO: ゲームをQuitする
     const dealerId: string = req.body.dealerId;
     const gameRepository = new GameRepository(db, dealerId);
     const qs = new QueryService(db);
@@ -102,7 +101,6 @@ export const game = functions.https.onRequest(async (req, res) => {
   } else if (typeof req.query.dealerId !== "string") {
     res.status(400).send("Invalid body parameter");
   } else {
-    // TODO: ゲーム情報をreturnする
     const dealerId: string = req.query.dealerId;
     const qs = new QueryService(db);
     const getGame = new GetGame(qs);
