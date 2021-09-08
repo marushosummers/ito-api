@@ -30,11 +30,12 @@ export const signup = functions.https.onRequest(async (req, res) => {
     const type: string = req.body.type;
     const name: string = req.body.name;
     const dealerRepository = new DealerRepository(db);
-    const signupDealer = new SignupDealer(dealerRepository);
+    const qs = new QueryService(db);
+    const signupDealer = new SignupDealer(dealerRepository, qs);
 
     try {
-      const dealerId = await signupDealer.signup({type: type, name: name});
-      res.send(new GetOKResponse({dealerId: dealerId, game: null}));
+      const dealer = await signupDealer.signup({type: type, name: name});
+      res.send(new GetOKResponse({dealerId: dealer.id, game: null}));
     } catch (err) {
       console.error(err);
       res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));

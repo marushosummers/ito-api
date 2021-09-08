@@ -12,9 +12,15 @@ export class CreateGame {
   }
 
   public async create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Promise<Game> {
+    // NOTE: dealerがなければエラー
+    const dealer = await this.qs.getDealerById(props.dealerId);
+    if (!dealer) {
+      throw Error();
+    }
+
     // NOTE: 既存のGameがあればquitしておく
     // このロジックはDomainに寄せたほうが良い...?
-    const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
+    const game = await this.qs.getGameInPlay(props.dealerId);
     if (game) {
       game.setQuit();
       await this.gameRepository.save(game);

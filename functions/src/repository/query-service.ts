@@ -1,5 +1,6 @@
 
 import {IQueryService} from "../usecase/interface/query-service";
+import {Dealer} from "../domain/entity/Dealer";
 import {Game, Player, GameStatus} from "../domain/entity/Game";
 
 export class QueryService implements IQueryService {
@@ -31,6 +32,44 @@ export class QueryService implements IQueryService {
         }
       }
       return new Game({id: gameId, thema: gameThema, players: players, status: gameStatus});
+    }
+  }
+
+  public async getDealerById(dealerId: string): Promise<Dealer | null> {
+    const snapshot = await this.db.collection("dealer").doc(dealerId).get();
+    const data = snapshot.data();
+    if (!snapshot.exists || !data) {
+      return null;
+    } else {
+      const id = snapshot.id;
+      const name = data.name;
+      const type = data.type;
+      return new Dealer({
+        id: id,
+        name: name,
+        type: type,
+      });
+    }
+  }
+
+  public async getDealerByName(dealerName: string): Promise<Dealer | null> {
+    const snapshot = await this.db.collection("dealer").where("name", "==", dealerName).limit(1).get();
+    if (snapshot.empty) {
+      return null;
+    } else {
+      let id = "";
+      let name = "";
+      let type = "";
+      for await (const dealer of snapshot.docs) {
+        id = dealer.id;
+        name = dealer.data().name;
+        type = dealer.data().type;
+      }
+      return new Dealer({
+        id: id,
+        name: name,
+        type: type,
+      });
     }
   }
 }
