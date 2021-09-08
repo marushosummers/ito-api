@@ -39,7 +39,6 @@ export const signup = functions.https.onRequest(async (req, res) => {
 
 
 export const create = functions.https.onRequest(async (req, res) => {
-  // TODO: POST新しいGameを発行
   if (req.method !== "POST") {
     res.status(400).send("This method is not supported");
   } else if (req.body.dealerId === undefined) {
@@ -51,10 +50,10 @@ export const create = functions.https.onRequest(async (req, res) => {
     try {
       const game = await createGame.create({
         dealerId: dealerId,
-        playerNum: 5,
+        playerNum: 3,
         thema: "hoge",
         minCard: 0,
-        maxCard: 100,
+        maxCard: 20,
       });
       res.send(`Created new Game id: ${game.id}`);
     } catch (err) {

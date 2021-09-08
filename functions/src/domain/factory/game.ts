@@ -8,7 +8,7 @@ export class GameFactory {
     const dealerId: string = props.dealerId;
     const playerNum: number = props.playerNum;
     const thema: string = props.thema ?? this.generateThema();
-    const minCard: number = props.minCard ?? 0; // NOTE: デフォルトで最小値は0
+    const minCard: number = props.minCard ?? 1; // NOTE: デフォルトで最小値は1
     const maxCard: number = props.maxCard ?? 100; // NOTE: デフォルトで最大値は100
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
 
