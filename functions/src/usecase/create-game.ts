@@ -11,7 +11,7 @@ export class CreateGame {
     this.qs = qs;
   }
 
-  public async create(props: { dealerId: string, playerNum: number, thema?: string, minCard?: number, maxCard?: number }): Promise<Game> {
+  public async create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Promise<Game> {
     // NOTE: 既存のGameがあればquitしておく
     // このロジックはDomainに寄せたほうが良い...?
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);

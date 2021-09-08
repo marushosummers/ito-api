@@ -3,14 +3,14 @@ import {Game, Player, GameStatus} from "../entity/Game";
 import {uuid} from "uuidv4";
 
 export class GameFactory {
-  public create(props: { dealerId: string, playerNum: number, thema?: string, minCard?: number, maxCard?: number }): Game {
+  public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Game {
     // TODO: validationを追加する
     const id: string = uuid();
-    const dealerId: string = props.dealerId;
-    const playerNum: number = props.playerNum;
+    // const dealerId: string = props.dealerId;
+    const playerNum: number = props.playerNum; // TODO: 2 - 10 のみに制限
     const thema: string = props.thema ?? this.generateThema();
-    const minCard: number = props.minCard ?? 1; // NOTE: デフォルトで最小値は1
-    const maxCard: number = props.maxCard ?? 100; // NOTE: デフォルトで最大値は100
+    const minCard = 1; // NOTE: 最小値は1
+    const maxCard: number = props.maxCard ?? 100; // TODO: 10以上に制限
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
 
     const players: Player[] = this.generatePlayers(playerNum, minCard, maxCard);
@@ -50,7 +50,7 @@ export class GameFactory {
     for (let i = 0; i < playerNum; i++) {
       let j = 0; // 無限ループを避けるため
       let num: number;
-      while (j < 10000000000) {
+      while (j < 1000) {
         num = this.intRandom(minCard, maxCard);
         if (!randoms.includes(num)) {
           randoms.push(num);

@@ -52,7 +52,6 @@ export const create = functions.https.onRequest(async (req, res) => {
     const dealerId = req.body.dealerId;
     const playerNum = req.body.playerNum;
     const thema = req.body.thema;
-    const minCard = req.body.minCard;
     const maxCard = req.body.maxCard;
     const gameRepository = new GameRepository(db, dealerId);
     const qs = new QueryService(db);
@@ -62,7 +61,6 @@ export const create = functions.https.onRequest(async (req, res) => {
         dealerId: dealerId,
         playerNum: playerNum,
         thema: thema,
-        minCard: minCard,
         maxCard: maxCard,
       });
       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
