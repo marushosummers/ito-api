@@ -1,5 +1,5 @@
 import {Dealer} from "../domain/entity/Dealer";
-import {uuid} from "uuidv4";
+import {v4 as uuid} from "uuid";
 import {IDealerRepository} from "./interface/dealer-repository";
 import {IQueryService} from "./interface/query-service";
 

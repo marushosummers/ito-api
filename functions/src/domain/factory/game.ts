@@ -1,6 +1,6 @@
 import {Game, Player, GameStatus} from "../entity/Game";
 
-import {uuid} from "uuidv4";
+import {v4 as uuid} from "uuid";
 
 export class GameFactory {
   public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Game {
