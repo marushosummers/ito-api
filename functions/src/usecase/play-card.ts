@@ -1,7 +1,8 @@
 import {IGameRepository} from "./interface/game-repository";
 import {IQueryService} from "./interface/query-service";
-import {Game} from "../domain/entity/Game";
-export class QuitGame {
+import {Game, Player} from "../domain/entity/Game";
+
+export class PlayCard {
   private readonly gameRepository: IGameRepository
   private readonly qs: IQueryService;
 
@@ -10,15 +11,19 @@ export class QuitGame {
     this.qs = qs;
   }
 
-  public async quit(): Promise<Game | null> {
+  public async play(playerId: string): Promise<Game> {
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
 
-    if (game) {
-      game.setQuit();
+    if (!game) {
+      throw new ReferenceError("There are no Game in play.");
+    } else if (!game.players.some((player) => player.id === playerId)) {
+      throw new ReferenceError("The player is not found.");
+    } else {
+      const player: Player = game.players.filter((player) => player.id === playerId)[0];
+      player.setPlayed();
+      game.judge();
       await this.gameRepository.save(game);
       return game;
-    } else {
-      return null;
     }
   }
 }

@@ -7,6 +7,8 @@ import {QuitGame} from "./usecase/quit-game";
 import {GameRepository} from "./repository/game-repository";
 import {GetGame} from "./usecase/get-game";
 import {QueryService} from "./repository/query-service";
+import {PlayCard} from "./usecase/play-card";
+import {GetOKResponse, GetErrorResponse} from "./presentation/response";
 
 
 admin.initializeApp(functions.config().firebase);
@@ -31,11 +33,11 @@ export const signup = functions.https.onRequest(async (req, res) => {
     const signupDealer = new SignupDealer(dealerRepository);
 
     try {
-      const id = await signupDealer.signup({type: type, name: name});
-      res.send(`Created new Dealer id: ${id}`);
+      const dealerId = await signupDealer.signup({type: type, name: name});
+      res.send(new GetOKResponse({dealerId: dealerId, game: null}));
     } catch (err) {
       console.error(err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
     }
   }
 });
@@ -62,17 +64,37 @@ export const create = functions.https.onRequest(async (req, res) => {
         minCard: minCard,
         maxCard: maxCard,
       });
-      res.send(`Created new Game id: ${game.id}`);
+      res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
     }
   }
 });
 
 export const play = functions.https.onRequest(async (req, res) => {
-  // TODO: POST カードを出すアクション
-  res.send("Play a card by hogehoge");
+  if (req.method !== "POST") {
+    res.status(400).send("This method is not supported");
+  } else if (req.body.dealerId === undefined || req.body.playerId === undefined) {
+    res.status(400).send("Invalid body parameter");
+  } else {
+    const dealerId = req.body.dealerId;
+    const playerId = req.body.playerId;
+    const gameRepository = new GameRepository(db, dealerId);
+    const qs = new QueryService(db);
+    const playCard = new PlayCard(gameRepository, qs);
+    try {
+      const game = await playCard.play(playerId);
+      res.send(new GetOKResponse({dealerId: dealerId, game: game}));
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ReferenceError) {
+        res.status(400).send(new GetErrorResponse({message: err.message}));
+      } else {
+        res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      }
+    }
+  }
 });
 
 export const quit = functions.https.onRequest(async (req, res) => {
@@ -86,12 +108,12 @@ export const quit = functions.https.onRequest(async (req, res) => {
     const qs = new QueryService(db);
     const quitGame = new QuitGame(gameRepository, qs);
     try {
-      await quitGame.quit();
+      const game = await quitGame.quit();
+      res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
     }
-    res.send("Success");
   }
 });
 
@@ -104,8 +126,13 @@ export const game = functions.https.onRequest(async (req, res) => {
     const dealerId: string = req.query.dealerId;
     const qs = new QueryService(db);
     const getGame = new GetGame(qs);
-    const game = await getGame.getInPlay({dealerId});
-    res.send(game);
+    try {
+      const game = await getGame.getInPlay({dealerId});
+      res.send(new GetOKResponse({dealerId: dealerId, game: game}));
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+    }
   }
 });
 
