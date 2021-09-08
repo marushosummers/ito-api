@@ -1,10 +1,9 @@
-
 import {IGameRepository} from "../usecase/interface/game-repository";
 import {Game} from "../domain/entity/Game";
 
 export class GameRepository implements IGameRepository {
   private db: FirebaseFirestore.Firestore
-  private dealerId: string
+  public readonly dealerId: string
   public constructor(db: FirebaseFirestore.Firestore, dealerId: string) {
     this.db = db;
     this.dealerId = dealerId;
@@ -23,5 +22,11 @@ export class GameRepository implements IGameRepository {
         "isPlayed": player.isPlayed,
       });
     }
+  }
+
+  public async quit(gameId: string): Promise<void> {
+    await this.db.collection("dealer").doc(this.dealerId).collection("games").doc(gameId).update({
+      "status": "QUIT",
+    });
   }
 }

@@ -84,9 +84,10 @@ export const quit = functions.https.onRequest(async (req, res) => {
     // TODO: ゲームをQuitする
     const dealerId: string = req.body.dealerId;
     const gameRepository = new GameRepository(db, dealerId);
-    const quitGame = new QuitGame(gameRepository);
+    const qs = new QueryService(db);
+    const quitGame = new QuitGame(gameRepository, qs);
     try {
-      await quitGame.quit({dealerId});
+      await quitGame.quit();
     } catch (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");
