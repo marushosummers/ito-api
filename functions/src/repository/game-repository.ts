@@ -9,24 +9,18 @@ export class GameRepository implements IGameRepository {
     this.dealerId = dealerId;
   }
 
-  public async create(game: Game): Promise<void> {
+  public async save(game: Game): Promise<void> {
     await this.db.collection("dealer").doc(this.dealerId).collection("games").doc(game.id).set({
       "thema": game.thema,
       "status": game.status,
-    });
+    }, {merge: true});
 
     // NOTE: DBアクセスの繰り返し処理はあまり良くなさそう................................
     for (const player of game.players) {
       await this.db.collection("dealer").doc(this.dealerId).collection("games").doc(game.id).collection("players").doc(player.id).set({
         "card": player.card,
         "isPlayed": player.isPlayed,
-      });
+      }, {merge: true});
     }
-  }
-
-  public async quit(gameId: string): Promise<void> {
-    await this.db.collection("dealer").doc(this.dealerId).collection("games").doc(gameId).update({
-      "status": "QUIT",
-    });
   }
 }

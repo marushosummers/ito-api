@@ -13,7 +13,8 @@ export class QuitGame {
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
 
     if (game) {
-      await this.gameRepository.quit(game.id);
+      game.setQuit();
+      await this.gameRepository.save(game);
     }
   }
 }

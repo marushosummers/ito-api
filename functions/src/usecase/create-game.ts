@@ -13,7 +13,7 @@ export class CreateGame {
     // TODO: 既存のGameがあるかチェック
     const gameFactory = new GameFactory();
     const game = gameFactory.create({...props});
-    await this.gameRepository.create(game);
+    await this.gameRepository.save(game);
     return game;
   }
 }
