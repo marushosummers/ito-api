@@ -12,7 +12,6 @@ export class QueryService implements IQueryService {
   public async getGameInPlay(dealerId: string): Promise<Game | null> {
     const snapshot = await this.db.collection("dealer").doc(dealerId).collection("games").where("status", "==", "INPLAY").limit(1).get();
     if (snapshot.empty) {
-      console.log("No such document!");
       return null;
     } else {
       // TODO: gameDTOを作成する
