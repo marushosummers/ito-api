@@ -13,9 +13,6 @@ export class GameFactory {
     const maxCard: number = props.maxCard ?? 100; // NOTE: デフォルトで最大値は100
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
 
-    // TODO: Dealerが重複しないかチェック
-    console.log(dealerId);
-
     const players: Player[] = this.generatePlayers(playerNum, minCard, maxCard);
 
     return new Game({

@@ -11,14 +11,15 @@ export class CreateGame {
     this.qs = qs;
   }
 
-  public async create(props: { dealerId: string, playerNum: number, thema?: string, minCard?: number, maxCard?: number}): Promise<Game> {
-    // const {dealerId, playerNum, thema, minCard, maxCard} = props;
+  public async create(props: { dealerId: string, playerNum: number, thema?: string, minCard?: number, maxCard?: number }): Promise<Game> {
+    // NOTE: 既存のGameがあればquitしておく
+    // このロジックはDomainに寄せたほうが良い...?
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
     if (game) {
-      // NOTE: 既存のGameがあればquitしておく
       game.setQuit();
       await this.gameRepository.save(game);
     }
+
     const gameFactory = new GameFactory();
     const newGame = gameFactory.create({...props});
     await this.gameRepository.save(newGame);
