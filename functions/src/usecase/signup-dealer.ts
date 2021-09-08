@@ -1,6 +1,6 @@
 import {Dealer} from "../domain/entity/Dealer";
 import {uuid} from "uuidv4";
-import {IDealerRepository} from "./repository-interface/dealer-repository";
+import {IDealerRepository} from "./interface/dealer-repository";
 
 export class SignupDealer {
     private readonly dealerRepository: IDealerRepository

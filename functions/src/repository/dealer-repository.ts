@@ -1,5 +1,5 @@
 
-import {IDealerRepository} from "../usecase/repository-interface/dealer-repository";
+import {IDealerRepository} from "../usecase/interface/dealer-repository";
 import {Dealer} from "../domain/entity/Dealer";
 
 export class DealerRepository implements IDealerRepository {

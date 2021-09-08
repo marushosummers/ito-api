@@ -1,5 +1,5 @@
 
-import {IGameRepository} from "../usecase/repository-interface/game-repository";
+import {IGameRepository} from "../usecase/interface/game-repository";
 import {Game} from "../domain/entity/Game";
 
 export class GameRepository implements IGameRepository {

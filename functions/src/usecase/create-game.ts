@@ -1,6 +1,6 @@
 import {Game} from "../domain/entity/Game";
 import {GameFactory} from "../domain/factory/game";
-import {IGameRepository} from "./repository-interface/game-repository";
+import {IGameRepository} from "./interface/game-repository";
 
 export class CreateGame {
   private readonly gameRepository: IGameRepository
