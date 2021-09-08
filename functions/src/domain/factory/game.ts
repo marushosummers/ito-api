@@ -50,12 +50,12 @@ export class GameFactory {
     // NOTE: 重複しないように乱数生成
     const randoms: number[] = [];
     for (let i = 0; i < playerNum; i++) {
-      let j = 0;
-      let tmp: number;
+      let j = 0; // 無限ループを避けるため
+      let num: number;
       while (j < 10000000000) {
-        tmp = this.intRandom(minCard, maxCard);
-        if (!randoms.includes(tmp)) {
-          randoms.push(tmp);
+        num = this.intRandom(minCard, maxCard);
+        if (!randoms.includes(num)) {
+          randoms.push(num);
           break;
         }
         j++;
