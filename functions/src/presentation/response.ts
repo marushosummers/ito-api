@@ -40,7 +40,7 @@ class Game {
     const {id, thema, players, status} = props;
     this.id = id;
     this.thema = thema;
-    this.players = players;
+    this.players = players.map((player) => new Player({id: player.id, card: player.card, isPlayed: player.isPlayed}));
     this.status = status;
   }
 }

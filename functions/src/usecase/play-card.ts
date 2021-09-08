@@ -18,6 +18,8 @@ export class PlayCard {
       throw new ReferenceError("There are no Game in play.");
     } else if (!game.players.some((player) => player.id === playerId)) {
       throw new ReferenceError("The player is not found.");
+    } else if (game.players.some((player) => player.id === playerId && player.isPlayed)) {
+      throw new ReferenceError("The player has already played.");
     } else {
       const player: Player = game.players.filter((player) => player.id === playerId)[0];
       player.setPlayed();

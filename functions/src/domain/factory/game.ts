@@ -4,6 +4,7 @@ import {uuid} from "uuidv4";
 
 export class GameFactory {
   public create(props: { dealerId: string, playerNum: number, thema?: string, minCard?: number, maxCard?: number }): Game {
+    // TODO: validationを追加する
     const id: string = uuid();
     const dealerId: string = props.dealerId;
     const playerNum: number = props.playerNum;

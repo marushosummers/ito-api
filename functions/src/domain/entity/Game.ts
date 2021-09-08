@@ -29,20 +29,20 @@ export class Game {
     }
 
     const minNotPlayedNumber: number = Game.getMinCardPlayer(notPlayedPlayers).card;
-    const maxPlayedNumber: number = Game.getMinCardPlayer(playedPlayers).card;
+    const maxPlayedNumber: number = Game.getMaxCardPlayer(playedPlayers).card;
 
     if (maxPlayedNumber < minNotPlayedNumber) {
-      // 今まで出したカードの最大値が、出していないカードの最小値より小さいのでゲーム続行
-      this._status = "INPLAY";
+      if (notPlayedPlayers.length === 1) {
+        // 最後の一人になったら成功
+        this._status = "SUCCESS";
+      } else {
+        // 今まで出したカードの最大値が、出していないカードの最小値より小さいのでゲーム続行
+        this._status = "INPLAY";
+      }
     } else if (maxPlayedNumber > minNotPlayedNumber) {
       this._status = "OVER";
     } else {
       throw Error("Unexpected error");
-    }
-
-    if (notPlayedPlayers.length === 1) {
-      // 最後の一人になったら成功
-      this._status = "SUCCESS";
     }
   }
 
@@ -59,7 +59,7 @@ export class Game {
   }
 
   private static getMaxCardPlayer(players: Player[]) {
-    return players.reduce((prev, current) => ((prev.card < current.card) ? prev : current));
+    return players.reduce((prev, current) => ((prev.card > current.card) ? prev : current));
   }
 }
 
