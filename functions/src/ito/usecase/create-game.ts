@@ -16,7 +16,7 @@ export class CreateGame {
     // NOTE: dealerがなければエラー
     const dealer = await this.qs.getDealerById(props.dealerId);
     if (!dealer) {
-      throw new NotFoundError("There are no dealer.");
+      throw new NotFoundError("The dealer is not found.");
     }
 
     // NOTE: 既存のGameがあればquitしておく

@@ -16,7 +16,7 @@ export class PlayCard {
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
 
     if (!game) {
-      throw new NotFoundError("There are no Game in play.");
+      throw new NotFoundError("There are no Games in play.");
     }
     const player: Player | undefined = game.players.filter((player) => player.id === playerId)[0];
     if (!player) {

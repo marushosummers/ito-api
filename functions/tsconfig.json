@@ -8,15 +8,6 @@
     "strict": true,
     "target": "es2017",
     "allowJs": true,
-    // "noUncheckedIndexedAccess": true, // ここから下を自分で設定
-    // "declaration": true,
-    // "removeComments": true,
-    // "emitDecoratorMetadata": true,
-    // "experimentalDecorators": true,
-    // "allowSyntheticDefaultImports": true,
-    // "baseUrl": "./functions/",
-    // "incremental": true,
-    // "paths": {"@testUtil/*": ["testUtil/*"]}
   },
   "compileOnSave": true,
   "include": [
