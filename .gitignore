@@ -110,6 +110,7 @@ dist
 # secrets
 *token.json
 *config.json
+!tsconfig.json
 
 # local data
 data/
