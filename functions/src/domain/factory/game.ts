@@ -4,14 +4,16 @@ import {v4 as uuid} from "uuid";
 
 export class GameFactory {
   public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Game {
-    // TODO: validationを追加する
     const id: string = uuid();
     // const dealerId: string = props.dealerId;
-    const playerNum: number = props.playerNum; // TODO: 2 - 10 のみに制限
+    const playerNum: number = props.playerNum;
     const thema: string = props.thema ?? this.generateThema();
     const minCard = 1; // NOTE: 最小値は1
-    const maxCard: number = props.maxCard ?? 100; // TODO: 10以上に制限
+    const maxCard: number = props.maxCard ?? 100;
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
+
+    this.validatePlayerNum(playerNum); // NOTE: 2 - 10 のみに制限
+    this.validateMaxCard(maxCard); // NOTE: 10以上に制限
 
     const players: Player[] = this.generatePlayers(playerNum, minCard, maxCard);
 
@@ -21,6 +23,18 @@ export class GameFactory {
       players: players,
       status: status,
     });
+  }
+
+  validatePlayerNum(playerNum: number): void {
+    if (!(playerNum >= 2 && playerNum <= 10)) {
+      throw new Error;
+    }
+  }
+
+  validateMaxCard(maxCard: number): void {
+    if (!(maxCard >= 10)) {
+      throw new Error;
+    }
   }
 
   generateThema(): string {
