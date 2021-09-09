@@ -1,4 +1,5 @@
 import {Game, Player, GameStatus} from "../entity/Game";
+import {InvalidParameterError} from "../entity/errors";
 
 import {v4 as uuid} from "uuid";
 
@@ -27,13 +28,13 @@ export class GameFactory {
 
   validatePlayerNum(playerNum: number): void {
     if (!(playerNum >= 2 && playerNum <= 10)) {
-      throw new Error;
+      throw new InvalidParameterError("Invalid number of player");
     }
   }
 
   validateMaxCard(maxCard: number): void {
     if (!(maxCard >= 10)) {
-      throw new Error;
+      throw new InvalidParameterError("Invalid number of max number");
     }
   }
 

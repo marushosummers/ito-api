@@ -9,7 +9,7 @@ import {GetGame} from "./usecase/get-game";
 import {QueryService} from "./repository/query-service";
 import {PlayCard} from "./usecase/play-card";
 import {GetOKResponse, GetErrorResponse} from "./presentation/response";
-
+import {InvalidParameterError, NotFoundError} from "./domain/entity/errors";
 
 admin.initializeApp(functions.config().firebase);
 export const db = admin.firestore();
@@ -38,7 +38,11 @@ export const signup = functions.https.onRequest(async (req, res) => {
       res.send(new GetOKResponse({dealerId: dealer.id, game: null}));
     } catch (err) {
       console.error(err);
-      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
+        res.status(400).send(new GetErrorResponse({message: err.message}));
+      } else {
+        res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      }
     }
   }
 });
@@ -67,7 +71,11 @@ export const create = functions.https.onRequest(async (req, res) => {
       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
+        res.status(400).send(new GetErrorResponse({message: err.message}));
+      } else {
+        res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      }
     }
   }
 });
@@ -88,7 +96,7 @@ export const play = functions.https.onRequest(async (req, res) => {
       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      if (err instanceof ReferenceError) {
+      if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
         res.status(400).send(new GetErrorResponse({message: err.message}));
       } else {
         res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
@@ -112,7 +120,11 @@ export const quit = functions.https.onRequest(async (req, res) => {
       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
+        res.status(400).send(new GetErrorResponse({message: err.message}));
+      } else {
+        res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      }
     }
   }
 });
@@ -131,7 +143,11 @@ export const game = functions.https.onRequest(async (req, res) => {
       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
     } catch (err) {
       console.error(err);
-      res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
+        res.status(400).send(new GetErrorResponse({message: err.message}));
+      } else {
+        res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
+      }
     }
   }
 });

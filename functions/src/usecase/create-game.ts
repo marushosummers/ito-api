@@ -2,6 +2,7 @@ import {Game} from "../domain/entity/Game";
 import {GameFactory} from "../domain/factory/game";
 import {IGameRepository} from "./interface/game-repository";
 import {IQueryService} from "./interface/query-service";
+import {NotFoundError} from "../domain/entity/errors";
 export class CreateGame {
   private readonly gameRepository: IGameRepository
   private readonly qs: IQueryService;
@@ -15,7 +16,7 @@ export class CreateGame {
     // NOTE: dealerがなければエラー
     const dealer = await this.qs.getDealerById(props.dealerId);
     if (!dealer) {
-      throw Error();
+      throw new NotFoundError("There are no dealer.");
     }
 
     // NOTE: 既存のGameがあればquitしておく

@@ -2,6 +2,7 @@ import {Dealer} from "../domain/entity/Dealer";
 import {v4 as uuid} from "uuid";
 import {IDealerRepository} from "./interface/dealer-repository";
 import {IQueryService} from "./interface/query-service";
+import {InvalidParameterError} from "../domain/entity/errors";
 
 export class SignupDealer {
   private readonly dealerRepository: IDealerRepository
@@ -14,7 +15,7 @@ export class SignupDealer {
     // NOTE: 同じnameのdealerは作れない
     const dealer = await this.qs.getDealerByName(props.name);
     if (dealer) {
-      throw Error();
+      throw new InvalidParameterError("This dealer has already created.");
     }
     const id: string = uuid();
     const {type, name} = props;

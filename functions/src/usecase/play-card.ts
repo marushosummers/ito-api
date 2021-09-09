@@ -1,6 +1,7 @@
 import {IGameRepository} from "./interface/game-repository";
 import {IQueryService} from "./interface/query-service";
 import {Game, Player} from "../domain/entity/Game";
+import {InvalidParameterError, NotFoundError} from "../domain/entity/errors";
 
 export class PlayCard {
   private readonly gameRepository: IGameRepository
@@ -15,13 +16,13 @@ export class PlayCard {
     const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
 
     if (!game) {
-      throw new ReferenceError("There are no Game in play.");
+      throw new NotFoundError("There are no Game in play.");
     }
     const player: Player | undefined = game.players.filter((player) => player.id === playerId)[0];
     if (!player) {
-      throw new ReferenceError("The player is not found.");
+      throw new NotFoundError("The player is not found.");
     } else if (player && player.isPlayed) {
-      throw new ReferenceError("The player has already played.");
+      throw new InvalidParameterError("The player has already played.");
     } else {
       player.setPlayed();
       game.judge();
