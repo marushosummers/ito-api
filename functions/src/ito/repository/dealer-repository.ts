@@ -1,6 +1,7 @@
 
 import {IDealerRepository} from "../usecase/interface/dealer-repository";
 import {Dealer} from "../domain/entity/Dealer";
+import {firestore} from "firebase-admin";
 
 export class DealerRepository implements IDealerRepository {
   private db: FirebaseFirestore.Firestore
@@ -12,6 +13,7 @@ export class DealerRepository implements IDealerRepository {
     await this.db.collection("dealer").doc(dealer.id).set({
       "type": dealer.type,
       "name": dealer.name,
+      "createdAt": firestore.FieldValue.serverTimestamp(),
     });
   }
 }

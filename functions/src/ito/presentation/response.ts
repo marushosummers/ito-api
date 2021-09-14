@@ -40,12 +40,30 @@ class Game {
     const {id, thema, players, status} = props;
     this.id = id;
     this.thema = thema;
-    this.players = players.map((player) => new Player({id: player.id, card: player.card, isPlayed: player.isPlayed}));
+    this.players = players.map((player) => new Player({
+      id: player.id,
+      cards: player.cards.map((card) => new Card({
+        id: card.id,
+        card: card.card,
+        isPlayed: card.isPlayed,
+      })),
+    }));
     this.status = status;
   }
 }
 
 class Player {
+  id: string
+  cards: Card[]
+
+  public constructor(props: { id: string, cards: Card[]}) {
+    const {id, cards} = props;
+    this.id = id;
+    this.cards = cards;
+  }
+}
+
+class Card {
   id: string
   card: number
   isPlayed: boolean
@@ -57,4 +75,3 @@ class Player {
     this.isPlayed = isPlayed;
   }
 }
-

@@ -1,7 +1,7 @@
 
 import {IQueryService} from "../usecase/interface/query-service";
 import {Dealer} from "../domain/entity/Dealer";
-import {Game, Player, GameStatus} from "../domain/entity/Game";
+import {Game, Player, Card, GameStatus} from "../domain/entity/Game";
 
 export class QueryService implements IQueryService {
   private db: FirebaseFirestore.Firestore
@@ -27,7 +27,12 @@ export class QueryService implements IQueryService {
 
         const playersCollection = await gameDoc.ref.collection("players").get();
         for await (const playerDoc of playersCollection.docs) {
-          players.push(new Player({id: playerDoc.id, card: playerDoc.data().card, isPlayed: playerDoc.data().isPlayed}));
+          const cardsCollection = await playerDoc.ref.collection("cards").get();
+          const cards: Card[] = [];
+          for await (const cardDoc of cardsCollection.docs) {
+            cards.push(new Card({id: cardDoc.id, card: cardDoc.data().card, isPlayed: cardDoc.data().isPlayed}));
+          }
+          players.push(new Player({id: playerDoc.id, cards: cards}));
         }
       }
       return new Game({id: gameId, thema: gameThema, players: players, status: gameStatus});
