@@ -117,3 +117,4 @@ data/
 data-path/
 */data-path/
 .firebase
+.config

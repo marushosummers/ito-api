@@ -2,6 +2,8 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 
+process.env.TZ = "Asia/Tokyo";
+
 admin.initializeApp(functions.config().firebase);
 export const db = admin.firestore();
 db.settings({
@@ -15,3 +17,4 @@ db.settings({
 // });
 
 export * from "./ito";
+export * from "./slack";

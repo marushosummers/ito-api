@@ -8,6 +8,7 @@
     "strict": true,
     "target": "es2017",
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
   },
   "compileOnSave": true,
   "include": [
