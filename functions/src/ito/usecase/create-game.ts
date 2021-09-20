@@ -12,7 +12,7 @@ export class CreateGame {
     this.qs = qs;
   }
 
-  public async create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Promise<Game> {
+  public async create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number, handNum?: number }): Promise<Game> {
     // NOTE: dealerがなければエラー
     const dealer = await this.qs.getDealerById(props.dealerId);
     if (!dealer) {

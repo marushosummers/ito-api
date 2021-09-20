@@ -1,15 +1,15 @@
 import * as functions from "firebase-functions";
-import {db} from "./index";
-import {SignupDealer} from "./ito/usecase/signup-dealer";
-import {DealerRepository} from "./ito/repository/dealer-repository";
-import {CreateGame} from "./ito/usecase/create-game";
-import {QuitGame} from "./ito/usecase/quit-game";
-import {GameRepository} from "./ito/repository/game-repository";
-import {GetGame} from "./ito/usecase/get-game";
-import {QueryService} from "./ito/repository/query-service";
-import {PlayCard} from "./ito/usecase/play-card";
-import {GetOKResponse, GetErrorResponse} from "./ito/presentation/response";
-import {InvalidParameterError, NotFoundError} from "./ito/domain/entity/errors";
+import {db} from "../../index";
+import {SignupDealer} from "../usecase/signup-dealer";
+import {DealerRepository} from "../repository/dealer-repository";
+import {CreateGame} from "../usecase/create-game";
+import {QuitGame} from "../usecase/quit-game";
+import {GameRepository} from "../repository/game-repository";
+import {GetGame} from "../usecase/get-game";
+import {QueryService} from "../repository/query-service";
+import {PlayCard} from "../usecase/play-card";
+import {GetOKResponse, GetErrorResponse} from "./response";
+import {InvalidParameterError, NotFoundError} from "../domain/entity/errors";
 
 // localテスト時に設定
 // db.settings({

@@ -4,20 +4,20 @@ import {InvalidParameterError} from "../entity/errors";
 import {v4 as uuid} from "uuid";
 
 export class GameFactory {
-  public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number }): Game {
+  public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number, handNum?: number }): Game {
     const id: string = uuid();
     // const dealerId: string = props.dealerId;
     const playerNum: number = props.playerNum;
     const thema: string = props.thema ?? this.generateThema();
-    const cardNum = 1; // TODO: 一人あたりのカード枚数を選択できるようにする
+    const handNum = props.handNum ?? 1; // 一人あたりのカード枚数
     const minCard = 1; // NOTE: 最小値は1
     const maxCard: number = props.maxCard ?? 100;
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
 
     this.validatePlayerNum(playerNum); // NOTE: 2 - 10 のみに制限
-    this.validateMaxCard(maxCard); // NOTE: 10以上に制限
+    this.validateMaxCard(maxCard); // NOTE: 50以上に制限
 
-    const players: Player[] = this.generatePlayers(playerNum, cardNum, minCard, maxCard);
+    const players: Player[] = this.generatePlayers(playerNum, handNum, minCard, maxCard);
 
     return new Game({
       id: id,
@@ -28,24 +28,24 @@ export class GameFactory {
   }
 
   validatePlayerNum(playerNum: number): void {
-    if (!(playerNum >= 2 && playerNum <= 10)) {
+    if (!(playerNum >= 1 && playerNum <= 10)) {
       throw new InvalidParameterError("Invalid number of player");
     }
   }
 
   validateMaxCard(maxCard: number): void {
-    if (!(maxCard >= 10)) {
+    if (!(maxCard >= 50)) {
       throw new InvalidParameterError("Invalid number of max number");
     }
   }
 
   generateThema(): string {
-    return "sample thema";
+    return "行ってみたい国は？";
   }
 
-  generatePlayers(playerNum: number, cardNum: number, minCard: number, maxCard: number): Player[] {
-    const randoms: number[] = this.getRandomNumbers(playerNum, cardNum, minCard, maxCard);
-    const cardSets: Card[][] = this.generateCards(cardNum, randoms);
+  generatePlayers(playerNum: number, handNum: number, minCard: number, maxCard: number): Player[] {
+    const randoms: number[] = this.getRandomNumbers(playerNum, handNum, minCard, maxCard);
+    const cardSets: Card[][] = this.generateCards(handNum, randoms);
     const players: Player[] = [];
 
     for (const cards of cardSets) {
@@ -61,7 +61,7 @@ export class GameFactory {
   }
 
 
-  generateCards(cardNum: number, randoms: number[]): Card[][] {
+  generateCards(handNum: number, randoms: number[]): Card[][] {
     // NOTE:  [[Card(), Card(),...], [Card(), Card(),...],...]のような配列を生成する
     const cardSets: Card[][] = [];
 
@@ -75,7 +75,7 @@ export class GameFactory {
             isPlayed: false,
           })
       );
-      if (cardSet.length === cardNum) {
+      if (cardSet.length === handNum) {
         cardSets.push(cardSet);
         cardSet = [];
       }
@@ -84,10 +84,10 @@ export class GameFactory {
     return cardSets;
   }
 
-  getRandomNumbers(playerNum: number, cardNum: number, minCard: number, maxCard: number): number[] {
-    // NOTE: 重複しないようにplayerNum*cardNum個の乱数生成
+  getRandomNumbers(playerNum: number, handNum: number, minCard: number, maxCard: number): number[] {
+    // NOTE: 重複しないようにplayerNum*handNum個の乱数生成
     const randoms: number[] = [];
-    for (let i = 0; i < playerNum*cardNum; i++) {
+    for (let i = 0; i < playerNum*handNum; i++) {
       let j = 0; // 無限ループを避けるため
       let num: number;
       while (j < 1000) {

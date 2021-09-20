@@ -16,5 +16,4 @@ db.settings({
 // ssl: false,
 // });
 
-export * from "./ito";
 export * from "./slack";
