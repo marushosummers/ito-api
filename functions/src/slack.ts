@@ -5,5 +5,5 @@ import {playGame} from "./slack/presentation/internal/playGame";
 
 export const slack = functions.https.onRequest(expressReceiver.app);
 
-export const create = functions.firestore.document("historyGame/{id}").onWrite(createGame);
-export const play = functions.firestore.document("historyPlay/{id}").onWrite(playGame);
+export const create = functions.firestore.document("historyGame/{id}").onCreate(createGame);
+export const play = functions.firestore.document("historyPlay/{id}").onCreate(playGame);

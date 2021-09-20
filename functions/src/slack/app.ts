@@ -10,7 +10,7 @@ export const expressReceiver = new ExpressReceiver({
   endpoints: "/events",
 });
 
-const app = new App({
+export const app = new App({
   receiver: expressReceiver,
   token: config.slack.token,
   processBeforeResponse: true,
