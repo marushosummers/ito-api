@@ -14,6 +14,7 @@ export class GetOKResponse {
       thema: game.thema,
       players: game.players,
       status: game.status,
+      fieldCard: game.fieldCard,
     })] : []; // NOTE: nullなら空行列を返す
   }
 }
@@ -35,9 +36,10 @@ class Game {
   thema: string
   players: Player[]
   status: GameStatus
+  fieldCard: number
 
-  public constructor(props: { id: string, thema: string, players: Player[], status: GameStatus }) {
-    const {id, thema, players, status} = props;
+  public constructor(props: { id: string, thema: string, players: Player[], status: GameStatus, fieldCard: number }) {
+    const {id, thema, players, status, fieldCard} = props;
     this.id = id;
     this.thema = thema;
     this.players = players.map((player) => new Player({
@@ -49,8 +51,10 @@ class Game {
       })),
     }));
     this.status = status;
+    this.fieldCard = fieldCard;
   }
 }
+
 
 class Player {
   id: string

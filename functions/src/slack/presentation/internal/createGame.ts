@@ -14,7 +14,7 @@ interface DMChannel extends Channel {
 }
 
 export const createGame = async (snapshot: functions.firestore.QueryDocumentSnapshot): Promise<void> => {
-  console.log("Hello Trigger！");
+  console.log("Trigger Create Game");
 
   const data = snapshot.data();
   const game = new HistoryGame({
@@ -26,72 +26,80 @@ export const createGame = async (snapshot: functions.firestore.QueryDocumentSnap
     handNum: data.handNum,
   });
 
-  console.log(game);
-  // Get CreatUser Infomation
-  const createUser = await app.client.users.info({
-    token: config.slack.token,
-    user: game.createUserId,
-  });
+  try {
+    // Get CreatUser Infomation
+    const createUser = await app.client.users.info({
+      token: config.slack.token,
+      user: game.createUserId,
+    });
 
-  // Get PlayerUser Infomation
-  let playerUsers;
-  if (game.players) {
-    playerUsers = await Promise.all(game.players.map(async (user) => {
-      const _user = await app.client.users.info({
-        token: config.slack.token,
-        user: user,
-      });
-      return _user.user?.real_name ?? "";
-    }));
-  }
+    // Get PlayerUser Infomation
+    let playerUsers;
+    if (game.players) {
+      playerUsers = await Promise.all(game.players.map(async (user) => {
+        const _user = await app.client.users.info({
+          token: config.slack.token,
+          user: user,
+        });
+        return _user.user?.real_name ?? "";
+      }));
+    }
 
-  // Gameの開始
-  const channelRepository = new ChannelRepository(db);
-  const startGame = new StartGame(game.channelId, channelRepository);
-  await startGame.setDealerId();
+    // Gameの開始
+    const channelRepository = new ChannelRepository(db);
+    const startGame = new StartGame(game.channelId, channelRepository);
+    await startGame.setDealerId();
 
-  const playerMaps = await startGame.start({thema: game.thema, players: game.players, maxNum: game.maxNum, handNum: game.handNum});
+    const playerMaps = await startGame.start({thema: game.thema, players: game.players, maxNum: game.maxNum, handNum: game.handNum});
 
-  // DMチャンネル一覧を取得
-  const DMList = await app.client.conversations.list({
-    token: config.slack.token,
-    types: "im",
-  });
-  const DMs = DMList.channels as DMChannel[];
+    // DMチャンネル一覧を取得
+    const DMList = await app.client.conversations.list({
+      token: config.slack.token,
+      types: "im",
+    });
+    const DMs = DMList.channels as DMChannel[];
 
-  if (!DMs) {
-    throw Error();
-  }
-
-  // send Card
-  for await (const playerMap of playerMaps) {
-    const channel = DMs.find((channel) => channel.user === playerMap.id);
-
-    if (!channel) {
-      throw Error();
-    } else if (!channel.id) {
+    if (!DMs) {
       throw Error();
     }
 
+    // send Card
+    for await (const playerMap of playerMaps) {
+      const channel = DMs.find((channel) => channel.user === playerMap.id);
+
+      if (!channel) {
+        throw Error();
+      } else if (!channel.id) {
+        throw Error();
+      }
+
+      await app.client.chat.postMessage({
+        token: config.slack.token,
+        channel: channel.id,
+        text: `${playerMap.cards}`,
+      }
+      );
+    }
+
+    // PostMessage
     await app.client.chat.postMessage({
       token: config.slack.token,
-      channel: channel.id,
-      text: `${playerMap.cards}`,
-    }
-    );
+      channel: game.channelId,
+      text: "",
+      blocks: createResponseBlock(
+          createUser.user?.real_name,
+          game.thema,
+          playerUsers,
+          game.maxNum,
+          game.handNum
+      ),
+    });
+  } catch (error) {
+    console.error(error);
+    await app.client.chat.postMessage({
+      token: config.slack.token,
+      channel: game.channelId,
+      text: "エラーが発生しました",
+    });
   }
-
-  // PostMessage
-  await app.client.chat.postMessage({
-    token: config.slack.token,
-    channel: game.channelId,
-    text: "",
-    blocks: createResponseBlock(
-        createUser.user?.real_name,
-        game.thema,
-        playerUsers,
-        game.maxNum,
-        game.handNum
-    ),
-  });
 };

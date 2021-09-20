@@ -46,6 +46,16 @@ export class Game {
     }
   }
 
+  get fieldCard(): number {
+    const playedCards = this.getPlayedCards();
+
+    if (!playedCards.length) {
+      return 1; // NOTE: まだ誰もPlayしていない場合は1を返す
+    } else {
+      return Game.getMaxCard(playedCards).card;
+    }
+  }
+
   private getPlayedCards(): Card[] {
     return this.players.map((player) => player.cards).reduce((prev, cards) => prev.concat((cards.filter((card) => card.isPlayed))), []);
   }
@@ -55,12 +65,12 @@ export class Game {
   }
 
 
-  private static getMinCard(players: Card[]): Card {
-    return players.reduce((prev, current) => ((prev.card < current.card) ? prev : current));
+  private static getMinCard(cards: Card[]): Card {
+    return cards.reduce((prev, current) => ((prev.card < current.card) ? prev : current));
   }
 
-  private static getMaxCard(players: Card[]): Card {
-    return players.reduce((prev, current) => ((prev.card > current.card) ? prev : current));
+  private static getMaxCard(cards: Card[]): Card {
+    return cards.reduce((prev, current) => ((prev.card > current.card) ? prev : current));
   }
 }
 

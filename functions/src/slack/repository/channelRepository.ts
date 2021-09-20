@@ -26,7 +26,7 @@ export class ChannelRepository {
     }
   }
 
-  public async getDealerIdByChannelId(channelId: string): Promise<string|null> {
+  public async getDealerIdByChannelId(channelId: string): Promise<string | null> {
     const snapshot = await this.db.collection("channels").doc(channelId).get();
     const data = snapshot.data();
     if (!snapshot.exists || !data) {
@@ -36,14 +36,14 @@ export class ChannelRepository {
     }
   }
 
-  public async getPlayerIdMapByChannelId(channelId: string): Promise<PlayerMap[]> {
-    const playerMap: PlayerMap[] = [];
-    const playersCollection = await this.db.collection("channels").doc(channelId).collection("players").get();
-
-    playersCollection.forEach((player) => {
-      playerMap.push({"id": player.id, "itoId": player.data().itoId});
-    });
-    return playerMap;
+  public async getPlayerId(channelId: string, playerId: string): Promise<string | null> {
+    const snapshot = await this.db.collection("channels").doc(channelId).collection("players").doc(playerId).get();
+    const data = snapshot.data();
+    if (!snapshot.exists || !data) {
+      return null;
+    } else {
+      return data.itoId;
+    }
   }
 }
 
