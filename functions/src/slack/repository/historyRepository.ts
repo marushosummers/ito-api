@@ -1,6 +1,5 @@
 
-import { firestore } from "firebase-admin";
-import { PlayerMap } from "../domain/Channel";
+import {firestore} from "firebase-admin";
 
 export class HistoryRepository {
   private db: FirebaseFirestore.Firestore
@@ -8,16 +7,29 @@ export class HistoryRepository {
     this.db = db;
   }
 
-  public async saveCreateGame(channelId: string, players: PlayerMap[]): Promise<void> {
+  public async saveCreateGame(props: {
+    channelId: string
+    createUserId: string,
+    thema: string,
+    players: string[],
+    maxNum: number,
+    handNum: number,
+  }): Promise<void> {
     await this.db.collection("historyGame").add({
-        "channelId": channelId,
-        "createdAt": firestore.FieldValue.serverTimestamp(),
-      });
+      "channelId": props.channelId,
+      "createUserId": props.createUserId,
+      "thema": props.thema,
+      "players": props.players,
+      "maxNum": props.maxNum,
+      "handNum": props.handNum,
+      "createdAt": firestore.FieldValue.serverTimestamp(),
+    });
   }
 
-  public async savePlayGame(channelId: string, player: string): Promise<void> {
+  public async savePlayGame(props: { channelId: string, player: string }): Promise<void> {
     await this.db.collection("historyPlay").add({
-      "channelId": channelId,
+      "channelId": props.channelId,
+      "player": props.player,
       "createdAt": firestore.FieldValue.serverTimestamp(),
     });
   }

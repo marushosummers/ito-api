@@ -2,10 +2,10 @@ import {KnownBlock} from "@slack/types/dist/index";
 
 export const createResponseBlock = (
     username: string | undefined,
-    thema: string | null | undefined,
+    thema: string,
     members: string[] | null | undefined,
-    maxNum: string | null | undefined,
-    handNum: string | null | undefined,
+    maxNum: number,
+    handNum: number,
 ): KnownBlock[] => {
   return [
     {

@@ -1,7 +1,7 @@
 import {KnownBlock} from "@slack/types/dist/index";
 
 export const createModalBlock = (
-    userId: string | undefined,
+    userId: string,
 ): KnownBlock[] => {
   return [
     {
@@ -149,7 +149,6 @@ export const createModalBlock = (
         type: "plain_text_input",
         action_id: "thema",
       },
-      optional: true,
     },
   ];
 };

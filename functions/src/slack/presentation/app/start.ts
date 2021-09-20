@@ -1,5 +1,6 @@
 import {App} from "@slack/bolt";
 import {db} from "../../../index";
+import {HistoryRepository} from "../../repository/historyRepository";
 import {createModalBlock} from "./lib/createModalBlock";
 
 const VIEW_ID = "newgame";
@@ -39,29 +40,39 @@ export const commandStart = (app: App): void => {
   });
 
   app.view(VIEW_ID, async ({ack, view, context, body}) => {
-    await ack();
     const values = view.state.values;
-    const createUserId = body.user.id;
     const channelId = view.private_metadata;
+    const createUserId = body.user.id;
     const thema = values.thema_block.thema.value;
     const players = values.players_block.players.selected_users;
     const maxNum = values.maxNum_block.maxNum.selected_option?.value;
     const handNum = values.handNum_block.handNum.selected_option?.value;
 
     try {
-      // PostMessage
-      await app.client.chat.postMessage({
-        token: context.botToken,
-        channel: channelId,
-        text: "あたらしいゲームを開始します...",
-      });
-
-      // TODO: validation
+      // validation
       if (!thema || !players || !maxNum || !handNum) {
         throw Error("Invalid Prameter");
       }
 
-      // TODO: Save Game
+      // Save Game
+      const game = {
+        channelId: channelId,
+        createUserId: createUserId,
+        thema: thema,
+        players: players,
+        maxNum: parseInt(maxNum),
+        handNum: parseInt(handNum),
+      };
+
+      const historyRepository = new HistoryRepository(db);
+      await historyRepository.saveCreateGame(game);
+
+      await app.client.chat.postMessage({
+        token: context.botToken,
+        channel: channelId,
+        text: "ゲームを作成中...",
+      });
+      await ack();
     } catch (error) {
       console.error(error);
       await app.client.chat.postMessage({
