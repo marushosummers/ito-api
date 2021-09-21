@@ -1,7 +1,12 @@
 # ito-api
+
+ボードゲーム[ito](https://arclightgames.jp/product/ito/)の「クモノイト」ルールのファシリテートを行うAPI
+
+またはSlackのチャンネル上で動作するSlack app
 ## Requirement
 
 - firebase
+- Node.js
 
 ## Usage
 
@@ -41,7 +46,13 @@ firebase emulators:start --import=<data-path> --export-on-exit
 firebase login --no-localhost
 ```
 
+### デプロイ
 ```
 firebase deploy --only functions:<function name>
 ```
 
+### firebaseの環境変数設定
+```
+firebase functions:config:set slack.secret=xxxxxx
+firebase functions:config:set slack.token=xxxxxxx
+```
