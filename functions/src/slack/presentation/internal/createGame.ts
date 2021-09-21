@@ -68,15 +68,18 @@ export const createGame = async (snapshot: functions.firestore.QueryDocumentSnap
       const channel = DMs.find((channel) => channel.user === playerMap.id);
 
       if (!channel) {
-        throw Error();
+        throw Error("DM Channel is not found");
       } else if (!channel.id) {
-        throw Error();
+        throw Error("DM Channel Id is not found");
+      } else if (!playerMap.cards) {
+        throw Error("Card is not found");
       }
 
+      const cards = playerMap.cards.sort((a, b) => a - b).join("\n"); // 昇順に並び替え
       await app.client.chat.postMessage({
         token: config.slack.token,
         channel: channel.id,
-        text: `${playerMap.cards}`,
+        text: `${cards}`,
       }
       );
     }
