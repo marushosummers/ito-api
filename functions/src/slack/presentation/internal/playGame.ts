@@ -4,6 +4,7 @@ import {db} from "../../../index";
 import {HistoryPlay} from "../../domain/HistoryPlay";
 import {ChannelRepository} from "../../repository/channelRepository";
 import {PlayGame} from "../../usecase/play_game";
+import {GameResult} from "../../domain/GameResult";
 
 const config = functions.config();
 
@@ -20,10 +21,13 @@ export const playGame = async (snapshot: functions.firestore.QueryDocumentSnapsh
     const playGame = new PlayGame(historyPlay.channelId, channelRepository);
     await playGame.setDealerId();
     const result = await playGame.play({player: historyPlay.player});
+
+    const message = createJudgeMessage(result);
+
     await app.client.chat.postMessage({
       token: config.slack.token,
       channel: historyPlay.channelId,
-      text: `${result.status}/${result.fieldCard}`,
+      text: message,
     });
   } catch (error) {
     console.error(error);
@@ -34,4 +38,17 @@ export const playGame = async (snapshot: functions.firestore.QueryDocumentSnapsh
       text: message,
     });
   }
+};
+
+const createJudgeMessage = (result: GameResult): string => {
+  let message = `[ ${result.fieldCard} ]\n\n`;
+  if (result.status === "INPLAY") {
+    message += "⊂（＾ω＾）⊃　ｾﾌｾﾌ!!";
+  } else if (result.status === "SUCCESS") {
+    message += "ｷﾀ━━━ヽ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾉ━━━!!!!";
+  } else {
+    message += "=== GAME OVER ===";
+  }
+
+  return message;
 };

@@ -19,7 +19,7 @@ export const createResponseBlock = (
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `:raising_hand: *プレイヤー*\n\n${members}`,
+        text: `:raising_hand: *プレイヤー*\n\n${members?.join("\n")}`,
       },
     },
     {
