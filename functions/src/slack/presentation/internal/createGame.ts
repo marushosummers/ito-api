@@ -96,10 +96,11 @@ export const createGame = async (snapshot: functions.firestore.QueryDocumentSnap
     });
   } catch (error) {
     console.error(error);
+    const message = error instanceof Error ? error.message : "エラーが発生しました";
     await app.client.chat.postMessage({
       token: config.slack.token,
       channel: game.channelId,
-      text: "エラーが発生しました",
+      text: message,
     });
   }
 };

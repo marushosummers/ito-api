@@ -18,7 +18,8 @@ export const mentionIto = (app: App): void => {
       await say("壁||´⊇｀)ﾉｼ");
     } catch (error) {
       console.error(error);
-      await say("エラーが発生しました");
+      const message = error instanceof Error ? error.message : "エラーが発生しました";
+      await say(message);
     }
   });
 };

@@ -27,10 +27,11 @@ export const playGame = async (snapshot: functions.firestore.QueryDocumentSnapsh
     });
   } catch (error) {
     console.error(error);
+    const message = error instanceof Error ? error.message : "エラーが発生しました";
     await app.client.chat.postMessage({
       token: config.slack.token,
       channel: historyPlay.channelId,
-      text: "エラーが発生しました",
+      text: message,
     });
   }
 };

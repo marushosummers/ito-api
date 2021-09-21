@@ -75,10 +75,11 @@ export const commandStart = (app: App): void => {
       await ack();
     } catch (error) {
       console.error(error);
+      const message = error instanceof Error ? error.message : "エラーが発生しました";
       await app.client.chat.postMessage({
         token: context.botToken,
         channel: channelId,
-        text: "エラーが発生しました",
+        text: message,
       });
     }
   });
