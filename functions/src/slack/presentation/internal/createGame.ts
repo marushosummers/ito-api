@@ -75,7 +75,7 @@ export const createGame = async (snapshot: functions.firestore.QueryDocumentSnap
         throw Error("Card is not found");
       }
 
-      const cards = playerMap.cards.sort((a, b) => a - b).join("\n"); // 昇順に並び替え
+      const cards = playerMap.cards.sort((a, b) => a - b).join(" | "); // 昇順に並び替え
       await app.client.chat.postMessage({
         token: config.slack.token,
         channel: channel.id,
