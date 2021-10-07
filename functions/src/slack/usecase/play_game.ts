@@ -63,7 +63,24 @@ export class PlayGame {
 
     if (response.game.length) {
       const game = response.game[0];
-      return {"status": game.status, "fieldCard": game.fieldCard};
+      return {
+        status: game.status,
+        fieldCard: game.fieldCard,
+        id: game.id,
+        thema: game.thema,
+        players: game.players.map((player) => {
+          return {
+            id: player.id,
+            cards: player.cards.map((card) => {
+              return {
+                id: card.id,
+                card: card.card,
+                isPlayed: card.isPlayed,
+              };
+            }),
+          };
+        }),
+      };
     } else {
       throw new Error("Invalid Result");
     }
