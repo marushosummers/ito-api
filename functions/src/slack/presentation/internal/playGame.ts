@@ -43,12 +43,31 @@ export const playGame = async (snapshot: functions.firestore.QueryDocumentSnapsh
 const createJudgeMessage = (result: GameResult): string => {
   let message = `[ ${result.fieldCard} ]\n\n`;
   if (result.status === "INPLAY") {
-    message += "⊂（＾ω＾）⊃　ｾﾌｾﾌ!!";
+    message += "⊂（＾ω＾）⊃　ｾﾌｾﾌ!!\n";
   } else if (result.status === "SUCCESS") {
-    message += "ｷﾀ━━━ヽ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾉ━━━!!!!";
+    message += "ｷﾀ━━━ヽ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾒ( ﾟ∀ﾟ)人(ﾟ∀ﾟ )ﾉ━━━!!!!\n";
+    message += createEndMessage(result);
   } else {
-    message += "=== GAME OVER ===";
+    message += "=== GAME OVER ===\n";
   }
 
+  return message;
+};
+
+const createEndMessage = (result: GameResult): string => {
+  let message = `*RESULT: ${result.status}*\n\n`;
+  if (result.players) {
+    result.players.map((player) => {
+      message += ":speech_balloon: ";
+      player.cards.map((card) => {
+        if (card.isPlayed) {
+          message += `[${card.card}] `;
+        } else {
+          message += `*[${card.card}]* `;
+        }
+      });
+      message += "\n";
+    });
+  }
   return message;
 };

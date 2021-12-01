@@ -15,7 +15,7 @@ export const mentionIto = (app: App): void => {
       const historyRepository = new HistoryRepository(db);
       await historyRepository.savePlayGame({channelId, player});
 
-      await say("壁||´⊇｀)ﾉｼ");
+      await say("||´⊇｀) 処理中...");
     } catch (error) {
       console.error(error);
       const message = error instanceof Error ? error.message : "エラーが発生しました";

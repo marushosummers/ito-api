@@ -3,7 +3,7 @@ import {expressReceiver} from "./slack/app";
 import {createGame} from "./slack/presentation/internal/createGame";
 import {playGame} from "./slack/presentation/internal/playGame";
 
-export const slack = functions.https.onRequest(expressReceiver.app);
+export const slack = functions.region("asia-northeast1").https.onRequest(expressReceiver.app);
 
 export const create = functions.firestore.document("historyGame/{id}").onCreate(async (snapshot) => {
   await createGame(snapshot);
