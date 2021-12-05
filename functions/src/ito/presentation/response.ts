@@ -1,5 +1,8 @@
 import {GameStatus} from "../domain/entity/Game";
 
+export interface RoomResponse {
+  roomId: string
+}
 export class GetOKResponse {
   status: ResponseStatus
   dealerId: string

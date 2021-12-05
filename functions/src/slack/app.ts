@@ -16,5 +16,5 @@ export const app = new App({
   processBeforeResponse: true,
 });
 
-commandStart(app);
-mentionIto(app);
+// commandStart(app);
+// mentionIto(app);

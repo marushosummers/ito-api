@@ -1,7 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
-
 process.env.TZ = "Asia/Tokyo";
 
 admin.initializeApp(functions.config().firebase);
@@ -16,4 +15,4 @@ db.settings({
 // ssl: false,
 // });
 
-export * from "./slack";
+export * from "./ito/presentation/functions";

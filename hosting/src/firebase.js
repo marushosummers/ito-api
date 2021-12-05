@@ -1,5 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import {
+  getFunctions,
+  httpsCallable
+} from "firebase/functions";
+
+import {getFirestore} from "firebase/firestore";
 
 const env = process.env;
 
@@ -14,5 +20,10 @@ const firebaseConfig = {
   measurementId: env.REACT_APP_MEASUREMENT_ID,
 };
 
-const firebase = initializeApp(firebaseConfig);
-export const auth = getAuth(firebase);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+
+const functions = getFunctions(app, 'asia-northeast1');
+export const createRoomFunction = httpsCallable(functions, 'createRoom');
+
+export const firestore = getFirestore(app);
