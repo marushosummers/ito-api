@@ -13,7 +13,7 @@ export class PlayCard {
   }
 
   public async play(playerId: string): Promise<Game> {
-    const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
+    const game = await this.qs.getGameInPlay(this.gameRepository.roomId);
     if (!game) {
       throw new NotFoundError("There are no Games in play.");
     }

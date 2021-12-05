@@ -1,6 +1,6 @@
 import {Game} from "../../domain/entity/Game";
 
 export interface IGameRepository {
-    dealerId: string
+    roomId: string
     save(game: Game): Promise<void>
 }

@@ -11,7 +11,7 @@ export class QuitGame {
   }
 
   public async quit(): Promise<Game | null> {
-    const game = await this.qs.getGameInPlay(this.gameRepository.dealerId);
+    const game = await this.qs.getGameInPlay(this.gameRepository.roomId);
 
     if (game) {
       game.setQuit();
