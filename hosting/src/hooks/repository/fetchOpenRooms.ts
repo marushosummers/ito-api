@@ -2,8 +2,6 @@ import { firestore } from '../../firebase'
 import { getDocs, query, collection, where } from "firebase/firestore";
 import { Room } from '../../domain/UserState';
 
-
-
 const fetchOpenRooms = async (): Promise<Room[]> => {
   try {
     const rooms: Room[] = [];
@@ -17,8 +15,9 @@ const fetchOpenRooms = async (): Promise<Room[]> => {
         name: doc.data().name,
         createUser: doc.data().createUser,
         hostUser: doc.data().hostUser,
-        member: doc.data().member,
+        members: doc.data().members,
         isOpen: doc.data().isOpen,
+        game: doc.data().game,
       });
     });
 

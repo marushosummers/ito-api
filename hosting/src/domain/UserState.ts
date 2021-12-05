@@ -9,8 +9,9 @@ export type Room = {
   name: string;
   createUser: string;
   hostUser: string;
-  member: string[];
+  members: string[];
   isOpen: boolean;
+  game: any[];
 };
 
 export const initialState = { uid: null, loginRoomId: null, room: null };

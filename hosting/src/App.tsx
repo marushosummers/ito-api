@@ -43,7 +43,6 @@ export const App: VFC = () => {
             loginRoomId: doc.data().loginRoomId,
           }
         });
-        console.log("Current data: ", doc.id, doc.data());
       });
 
       setLoading(false)

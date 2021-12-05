@@ -1,11 +1,9 @@
-import { createRoomFunction } from "../firebase";
+import { startGameFunction } from "../firebase";
 
-const createRoom = async (): Promise<any> => {
-  createRoomFunction().then((result) => {
+const startGame = async (): Promise<void> => {
+  startGameFunction().then((result) => {
     const data: any = result.data;
-    return data.roomId;
-  })
+  });
 }
 
-export default createRoom
-
+export default startGame

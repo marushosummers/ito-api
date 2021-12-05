@@ -11,7 +11,7 @@ export class GameRepository implements IGameRepository {
 
   public async save(game: Game): Promise<void> {
     await this.db.collection("rooms").doc(this.roomId).set({
-      "game": game,
+      "game": game.all,
     }, {merge: true});
   }
 }

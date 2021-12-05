@@ -19,6 +19,15 @@ export class Game {
     this._status = "QUIT";
   }
 
+  get all(): any {
+    return {
+      id: this.id,
+      thema: this.thema,
+      players: this.players.map((player) => player.all),
+      status: this._status,
+    };
+  }
+
   public judge(): void {
     const playedCards = this.getPlayedCards();
     const notPlayedCards = this.getNotPlayedCards();
@@ -50,7 +59,7 @@ export class Game {
     const playedCards = this.getPlayedCards();
 
     if (!playedCards.length) {
-      return 1; // NOTE: まだ誰もPlayしていない場合は1を返す
+      return 0; // NOTE: まだ誰もPlayしていない場合は0を返す
     } else {
       return Game.getMaxCard(playedCards).card;
     }
@@ -85,6 +94,13 @@ export class Player {
     this.id = id;
     this.cards = cards;
   }
+
+  get all(): any {
+    return {
+      id: this.id,
+      cards: this.cards.map((card) => card.all),
+    };
+  }
 }
 
 export class Card {
@@ -99,6 +115,13 @@ export class Card {
     this._isPlayed = isPlayed;
   }
 
+  get all(): any {
+    return {
+      id: this.id,
+      card: this.card,
+      isPlayed: this._isPlayed,
+    };
+  }
   get isPlayed(): boolean {
     return this._isPlayed;
   }

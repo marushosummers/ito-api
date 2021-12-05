@@ -9,7 +9,7 @@ const createRoom = async(uid: string, name: string): Promise<Room|void> => {
       name: name,
       createUser: uid,
       hostUser: uid,
-      member: [uid],
+      members: [uid],
       isOpen: true,
       timestamp: serverTimestamp(),
     });
@@ -24,10 +24,12 @@ const createRoom = async(uid: string, name: string): Promise<Room|void> => {
       name: name,
       createUser: uid,
       hostUser: uid,
-      member: [],
+      members: [],
       isOpen: true,
+      game: null,
     }
     return room
+
   } catch (e) {
     console.error("Error adding document: ", e);
   }

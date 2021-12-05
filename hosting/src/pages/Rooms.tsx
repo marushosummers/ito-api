@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import fetchOpenRooms from "../hooks/repository/fetchOpenRooms";
-import RoomCard from "../components/RoomCard";
+import RoomCard from "../components/presentationals/RoomCard";
 
 export function Rooms() {
   const [rooms, setRooms] = useState([]);

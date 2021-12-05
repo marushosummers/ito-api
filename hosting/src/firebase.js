@@ -24,6 +24,6 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 const functions = getFunctions(app, 'asia-northeast1');
-export const createRoomFunction = httpsCallable(functions, 'createRoom');
+export const startGameFunction = httpsCallable(functions, 'startGame');
 
 export const firestore = getFirestore(app);

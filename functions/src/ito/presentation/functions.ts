@@ -15,11 +15,14 @@ export const startGame = functions.region(REGION).https.onCall(async (data, cont
   if (context.auth === undefined) {
     return new GetErrorResponse({message: "Unauthorized User"});
   }
-  const roomId: string = data.dealerId;
+
+  console.log(data);
+  const roomId: string = data.roomId;
   const members: string[] = data.members;
   const thema: string = data.thema;
   const maxCard: number = data.maxCard;
   const handNum: number = data.handNum;
+
 
   const gameRepository = new GameRepository(db, roomId);
   const qs = new QueryService(db);
@@ -91,28 +94,3 @@ export const startGame = functions.region(REGION).https.onCall(async (data, cont
 //     }
 //   }
 // });
-
-// export const game = functions.https.onRequest(async (req, res) => {
-//   if (req.method !== "GET") {
-//     res.status(400).send("This method is not supported");
-//   } else if (typeof req.query.dealerId !== "string") {
-//     res.status(400).send("Invalid body parameter");
-//   } else {
-//     const dealerId: string = req.query.dealerId;
-//     const qs = new QueryService(db);
-//     const getGame = new GetGame(qs);
-//     try {
-//       const game = await getGame.getInPlay({dealerId});
-//       res.send(new GetOKResponse({dealerId: dealerId, game: game}));
-//     } catch (err) {
-//       console.error(err);
-//       if (err instanceof InvalidParameterError || err instanceof NotFoundError) {
-//         res.status(400).send(new GetErrorResponse({message: err.message}));
-//       } else {
-//         res.status(500).send(new GetErrorResponse({message: "Internal Server Error"}));
-//       }
-//     }
-//   }
-// });
-
-
