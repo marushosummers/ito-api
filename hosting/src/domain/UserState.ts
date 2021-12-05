@@ -1,5 +1,6 @@
 export type UserState = {
   uid: string;
+  loginRoomId: string;
   room: Room;
 };
 
@@ -9,6 +10,7 @@ export type Room = {
   createUser: string;
   hostUser: string;
   member: string[];
+  isOpen: boolean;
 };
 
-export const initialState = { uid: null, room: null };
+export const initialState = { uid: null, loginRoomId: null, room: null };

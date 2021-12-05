@@ -1,24 +1,29 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { UserContext } from "../../context/userContext";
-import createRoom from "../../hooks/repository/createRoom";
+import { useHistory } from "react-router-dom";
+import { UserContext } from "../context/userContext";
+import createRoom from "../hooks/repository/createRoom";
 
 type Inputs = {
   roomName: string,
 };
 
 export function NewRoom() {
+  const history = useHistory();
   const { state, dispatch } = useContext(UserContext)
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    console.log("submit", data);
+    console.log("createRoom", data);
     const room = await createRoom(state.uid, data.roomName);
-    console.log("room", room);
-    dispatch({ type: "setRoom", payload: { ...state, room: room } });
+    if (room) {
+      console.log("room", room);
+      dispatch({ type: "setRoom", payload: { ...state, room: room } });
+      history.push(`/room/${room.id}`)
+    } else {
+      console.log("create Room Error")
+    }
   }
-
-  console.log(watch("roomName"))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

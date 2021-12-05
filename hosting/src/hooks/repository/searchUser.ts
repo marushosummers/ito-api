@@ -9,6 +9,7 @@ const searchUser = async (uid: string): Promise<any> => {
   if (docSnap.exists()) {
     const user: UserState = {
       uid: docSnap.id,
+      loginRoomId: docSnap.data().loginRoomId,
       room: null
     };
     return user;

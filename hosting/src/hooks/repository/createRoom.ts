@@ -1,5 +1,5 @@
 import { firestore } from '../../firebase'
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { Room } from '../../domain/UserState';
 
 const createRoom = async(uid: string, name: string): Promise<Room|void> => {
@@ -9,16 +9,23 @@ const createRoom = async(uid: string, name: string): Promise<Room|void> => {
       name: name,
       createUser: uid,
       hostUser: uid,
-      member: [],
+      member: [uid],
+      isOpen: true,
       timestamp: serverTimestamp(),
     });
-    console.log("Document written with ID: ", docRef.id);
+
+    await setDoc(doc(firestore, "users", uid), {
+      loginRoomId: docRef.id,
+      timestamp: serverTimestamp()
+    }, { merge: true });
+
     const room: Room = {
       id: docRef.id,
       name: name,
       createUser: uid,
       hostUser: uid,
       member: [],
+      isOpen: true,
     }
     return room
   } catch (e) {

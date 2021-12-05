@@ -2,7 +2,7 @@ import { UserState } from '../domain/UserState';
 
 export type ActionType = {
   type: string;
-  payload: UserState;
+  payload: any;
 };
 
 export const UserReducer = (state: UserState, action: ActionType): UserState => {
@@ -21,7 +21,9 @@ export const UserReducer = (state: UserState, action: ActionType): UserState => 
 
     case 'setUser':
       return {
-        ...action.payload
+        ...state,
+        uid: action.payload.uid,
+        loginRoomId: action.payload.loginRoomId,
       };
 
     case 'setRoom':
