@@ -10,7 +10,7 @@ export class GameRepository implements IGameRepository {
   }
 
   public async save(game: Game): Promise<void> {
-    await this.db.collection("dealer").doc(this.dealerId).collection("games").doc(game.id).set({
+    await this.db.collection("rooms").doc(this.dealerId).collection("games").doc(game.id).set({
       "thema": game.thema,
       "status": game.status,
       "createdAt": firestore.FieldValue.serverTimestamp(),

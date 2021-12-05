@@ -4,20 +4,22 @@ import {InvalidParameterError} from "../entity/errors";
 import {v4 as uuid} from "uuid";
 
 export class GameFactory {
-  public create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number, handNum?: number }): Game {
+  public create(props: { roomId: string, members: string[], thema?: string, maxCard?: number, handNum?: number }): Game {
     const id: string = uuid();
     // const dealerId: string = props.dealerId;
-    const playerNum: number = props.playerNum;
+    const members = props.members;
+    const playerNum: number = props.members.length;
     const thema: string = props.thema ?? this.generateThema();
     const handNum = props.handNum ?? 1; // 一人あたりのカード枚数
     const minCard = 1; // NOTE: 最小値は1
     const maxCard: number = props.maxCard ?? 100;
     const status: GameStatus = "INPLAY"; // NOTE: Gameは必ずINPLAYで生成される
 
-    this.validatePlayerNum(playerNum); // NOTE: 2 - 10 のみに制限
+    this.validateHandNum(playerNum); // NOTE: 1 - 5 のみに制限
+    this.validatePlayerNum(playerNum); // NOTE: 2 - 9 のみに制限
     this.validateMaxCard(maxCard); // NOTE: 50以上に制限
 
-    const players: Player[] = this.generatePlayers(playerNum, handNum, minCard, maxCard);
+    const players: Player[] = this.generatePlayers(members, handNum, minCard, maxCard);
 
     return new Game({
       id: id,
@@ -27,8 +29,14 @@ export class GameFactory {
     });
   }
 
+  validateHandNum(handNum: number): void {
+    if (!(handNum >= 1 && handNum <= 5)) {
+      throw new InvalidParameterError("Invalid number of Card");
+    }
+  }
+
   validatePlayerNum(playerNum: number): void {
-    if (!(playerNum >= 1 && playerNum <= 10)) {
+    if (!(playerNum > 1 && playerNum <= 9)) {
       throw new InvalidParameterError("Invalid number of player");
     }
   }
@@ -43,19 +51,13 @@ export class GameFactory {
     return "行ってみたい国は？";
   }
 
-  generatePlayers(playerNum: number, handNum: number, minCard: number, maxCard: number): Player[] {
-    const randoms: number[] = this.getRandomNumbers(playerNum, handNum, minCard, maxCard);
+  generatePlayers(members: string[], handNum: number, minCard: number, maxCard: number): Player[] {
+    const randoms: number[] = this.getRandomNumbers(members.length, handNum, minCard, maxCard);
     const cardSets: Card[][] = this.generateCards(handNum, randoms);
-    const players: Player[] = [];
 
-    for (const cards of cardSets) {
-      players.push(
-          new Player({
-            id: uuid(),
-            cards: cards,
-          })
-      );
-    }
+    const players: Player[] = cardSets.map((cards: Card[], index: number) => {
+      return new Player({id: members[index], cards: cards});
+    });
 
     return players;
   }

@@ -12,16 +12,10 @@ export class CreateGame {
     this.qs = qs;
   }
 
-  public async create(props: { dealerId: string, playerNum: number, thema?: string, maxCard?: number, handNum?: number }): Promise<Game> {
-    // NOTE: dealerがなければエラー
-    const dealer = await this.qs.getDealerById(props.dealerId);
-    if (!dealer) {
-      throw new NotFoundError("The dealer is not found.");
-    }
-
+  public async create(props: { roomId: string, members: string[], thema: string, maxCard: number, handNum: number }): Promise<Game> {
     // NOTE: 既存のGameがあればquitしておく
     // このロジックはDomainに寄せたほうが良い...?
-    const game = await this.qs.getGameInPlay(props.dealerId);
+    const game = await this.qs.getGameInPlay(props.roomId);
     if (game) {
       game.setQuit();
       await this.gameRepository.save(game);
