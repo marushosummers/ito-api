@@ -25,5 +25,6 @@ export const auth = getAuth(app);
 
 const functions = getFunctions(app, 'asia-northeast1');
 export const startGameFunction = httpsCallable(functions, 'startGame');
+export const playFunction = httpsCallable(functions, 'play')
 
 export const firestore = getFirestore(app);

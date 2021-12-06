@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 
 function Game() {
-  const { state, dispatch } = useContext(UserContext);
+  const { state　} = useContext(UserContext);
   const game = state.room.game
   return (
     <div>
@@ -10,6 +10,9 @@ function Game() {
       <h3>id: {game.id}</h3>
       <h3>thema: {game.thema}</h3>
       <h3>status: {game.status}</h3>
+      <hr />
+      <h2>Field Card</h2>
+      <h1>{getFieldCard(game.players)}</h1>
       <hr />
       <h2> players </h2>
       {game.players.map(player => <GamePlayer player={player} />)}
@@ -47,4 +50,22 @@ function Card(props) {
       <h3>{String(props.card.isPlayed)}</h3>
     </div>
   )
+}
+
+const getFieldCard = (players): number => {
+  const playedCards = getPlayedCards(players);
+
+  if (!playedCards.length) {
+    return 0; // NOTE: まだ誰もPlayしていない場合は0を返す
+  } else {
+    return getMaxCard(playedCards).card;
+  }
+}
+
+const getPlayedCards = (players): any[] => {
+  return players.map((player) => player.cards).reduce((prev, cards) => prev.concat((cards.filter((card) => card.isPlayed))), []);
+}
+
+const getMaxCard = (cards) => {
+  return cards.reduce((prev, current) => ((prev.card > current.card) ? prev : current));
 }
