@@ -32,6 +32,9 @@ export class Game {
     const playedCards = this.getPlayedCards();
     const notPlayedCards = this.getNotPlayedCards();
 
+    console.log("playedCards", playedCards);
+    console.log("notPlayedCards", notPlayedCards);
+
     if (!playedCards.length || !notPlayedCards.length) {
       // 誰もカードを出してない/全員がカードを出している状態でのジャッジはされない想定
       throw Error("Unexpected error");

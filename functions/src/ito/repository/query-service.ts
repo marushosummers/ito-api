@@ -8,31 +8,27 @@ export class QueryService implements IQueryService {
     this.db = db;
   }
 
-  public async getGameInPlay(dealerId: string): Promise<Game | null> {
-    const snapshot = await this.db.collection("dealer").doc(dealerId).collection("games").where("status", "==", "INPLAY").limit(1).get();
-    if (snapshot.empty) {
+  public async getGameInPlay(roomId: string): Promise<Game | null> {
+    const roomDoc = await this.db.collection("rooms").doc(roomId).get();
+    if (!roomDoc.exists) {
       return null;
     } else {
       // TODO: gameDTOを作成する
-      let gameId = "";
-      let gameThema = "";
-      let gameStatus: GameStatus = "INPLAY";
+      const game = roomDoc.get("game");
       const players: Player[] = [];
 
-      for await (const gameDoc of snapshot.docs) {
-        gameId = gameDoc.id;
-        gameThema = gameDoc.data().thema;
-        gameStatus = gameDoc.data().status;
+      const gameId = game.id;
+      const gameThema = game.thema;
+      const gameStatus = game.status;
+      const gamePlayers = game.players;
 
-        const playersCollection = await gameDoc.ref.collection("players").get();
-        for await (const playerDoc of playersCollection.docs) {
-          const cardsCollection = await playerDoc.ref.collection("cards").get();
-          const cards: Card[] = [];
-          for await (const cardDoc of cardsCollection.docs) {
-            cards.push(new Card({id: cardDoc.id, card: cardDoc.data().card, isPlayed: cardDoc.data().isPlayed}));
-          }
-          players.push(new Player({id: playerDoc.id, cards: cards}));
+      for await (const gamePlayer of gamePlayers) {
+        const cards = [];
+        const gameCards = gamePlayer.cards;
+        for await (const gameCard of gameCards) {
+          cards.push(new Card({id: gameCard.id, card: gameCard.card, isPlayed: gameCard.isPlayed}));
         }
+        players.push(new Player({id: gamePlayer.id, cards: cards}));
       }
       return new Game({id: gameId, thema: gameThema, players: players, status: gameStatus});
     }
