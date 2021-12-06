@@ -2,7 +2,6 @@ import { useParams, useHistory } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 
-import updateUser from "../hooks/repository/updateUser";
 import addMember from "../hooks/repository/addMember";
 import removeMember from "../hooks/repository/removeMember";
 
@@ -28,18 +27,9 @@ function Room() {
         payload: { room: { ...doc.data(), id: doc.id } }
       });
     });
-    addMember(state.uid, id);
+    addMember(state.user.uid, id);
     return unsub;
-  }, [dispatch, state.uid, id]);
-
-  useEffect(() => {
-    // roomIdをstateに保存
-    if (!state.loginRoomId) {
-      updateUser(state.uid, id)
-    } else if (state.loginRoomId !== id) {
-      history.push("/");
-    }
-  }, [history, state.loginRoomId, state.uid, id])
+  }, [dispatch, state.user.uid, id]);
 
   const handleStart = () => {
     startGameFunction({
@@ -54,20 +44,17 @@ function Room() {
   const handlePlay = () => {
     playFunction({
       roomId: id,
-      playerId: state.uid,
+      playerId: state.user.uid,
     });
   }
 
   const handleExit = () => {
-    updateUser(state.uid, null);
-    removeMember(state.uid, id);
+    removeMember(state.user.uid, id);
     history.push("/")
   }
 
   return (
     <div>
-      {
-        state.loginRoomId === id &&
       <div>
           <p>パラメーターは{id}です</p>
           <button onClick={() => handleStart()}>
@@ -83,7 +70,6 @@ function Room() {
             { state.room?.game && <Game />}
           </div>
         </div>
-      }
     </div>
   );
 }

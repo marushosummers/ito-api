@@ -15,7 +15,7 @@ export function NewRoom() {
   const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async data => {
     console.log("createRoom", data);
-    const room = await createRoom(state.uid, data.roomName);
+    const room = await createRoom(state.user.uid, data.roomName);
     if (room) {
       console.log("room", room);
       dispatch({ type: "setRoom", payload: { ...state, room: room } });

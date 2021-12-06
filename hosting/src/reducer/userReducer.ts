@@ -7,23 +7,17 @@ export type ActionType = {
 
 export const UserReducer = (state: UserState, action: ActionType): UserState => {
   switch (action.type) {
-    case 'setUserId':
-      return {
-        ...state,
-        uid: action.payload.uid
-      };
-
-    case 'setOutUserId':
-      return {
-        ...state,
-        uid: null
-      };
-
     case 'setUser':
       return {
         ...state,
-        uid: action.payload.uid,
-        loginRoomId: action.payload.loginRoomId,
+        user: action.payload.user,
+        loading: false,
+      };
+
+    case 'deleteUser':
+      return {
+        ...state,
+        user: null,
       };
 
     case 'setRoom':

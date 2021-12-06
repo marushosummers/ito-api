@@ -1,6 +1,6 @@
 export type UserState = {
-  uid: string;
-  loginRoomId: string;
+  user: any;
+  loading: boolean;
   room: Room;
 };
 
@@ -14,4 +14,4 @@ export type Room = {
   game: any[];
 };
 
-export const initialState = { uid: null, loginRoomId: null, room: null };
+export const initialState = { user: null, loading: true, room: null };

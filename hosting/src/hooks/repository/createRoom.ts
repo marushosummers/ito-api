@@ -1,5 +1,5 @@
 import { firestore } from '../../firebase'
-import { collection, addDoc, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { Room } from '../../domain/UserState';
 
 const createRoom = async(uid: string, name: string): Promise<Room|void> => {
@@ -13,11 +13,6 @@ const createRoom = async(uid: string, name: string): Promise<Room|void> => {
       isOpen: true,
       timestamp: serverTimestamp(),
     });
-
-    await setDoc(doc(firestore, "users", uid), {
-      loginRoomId: docRef.id,
-      timestamp: serverTimestamp()
-    }, { merge: true });
 
     const room: Room = {
       id: docRef.id,

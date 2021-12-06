@@ -18,7 +18,7 @@ function Game() {
       {game.players.map(player => <GamePlayer player={player} />)}
       <hr />
       <h2> my cards </h2>
-      {game.players.map(player => player.id === state.uid && <OwnCards player={player} />)}
+      {game.players.map(player => player.id === state.user.uid && <OwnCards player={player} />)}
     </div>
   )
 }
